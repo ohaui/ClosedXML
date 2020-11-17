@@ -1835,13 +1835,20 @@ namespace ClosedXML.Excel
 
         public IXLRange RangeUsed(XLCellsUsedOptions options)
         {
+            IXLCell lastCell;
             var firstCell = (this as IXLRangeBase).FirstCellUsed(options);
             if (firstCell == null)
-                return null;
-            var lastCell = (this as IXLRangeBase).LastCellUsed(options);
+            {
+                firstCell = Cell(1, "A");
+                lastCell = Cell(1, "A");
+            }
+            else
+            {
+                lastCell = (this as IXLRangeBase).LastCellUsed(options);
+            }
+
             return Worksheet.Range(firstCell, lastCell);
         }
-
         public virtual void CopyTo(IXLRangeBase target)
         {
             CopyTo(target.FirstCell());
